@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-otel-agent-service
+  labels:
+    app: nodejs-otel-agent
+spec:
+  selector:
+    app: nodejs-otel-agent
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP

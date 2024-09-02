@@ -1,0 +1,56 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+exporters:
+  otlphttp:
+    endpoint: https://tempo.elvenobservability.com/http
+    headers:
+      X-Scope-OrgID: "<TENANT_ID>"
+      Authorization: "Bearer <API_TOKEN>"
+
+  prometheusremotewrite:
+    endpoint: https://mimir.elvenobservability.com/api/v1/push
+    headers:
+      X-Scope-OrgID: "<TENANT_ID>"
+      Authorization: "Bearer <API_TOKEN>"
+
+  loki:
+    endpoint: "http://loki.elvenobservability.com/loki/api/v1/push"
+    default_labels_enabled:
+      exporter: false
+      job: true
+    headers:
+      X-Scope-OrgID: "<TENANT_ID>"
+      Authorization: "Bearer <API_TOKEN>"
+
+processors:
+  batch: {}
+  filter:
+    metrics:
+      exclude:
+        match_type: regexp
+        metric_names:
+          - "go_.*"
+          - "scrape_.*"
+          - "otlp_.*"
+          - "promhttp_.*"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch, filter]
+      exporters: [prometheusremotewrite]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [loki]

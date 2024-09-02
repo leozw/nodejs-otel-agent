@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-otel-agent-deployment
+  labels:
+    app: nodejs-otel-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-otel-agent
+  template:
+    metadata:
+      labels:
+        app: nodejs-otel-agent
+    spec:
+      containers:
+        - name: nodejs-otel-agent
+          image: leonardozwirtes/nodejs-otel-agent:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: "nodejs-otel-agent"
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_METRICS_EXPORTER
+              value: "otlp"
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://opentelemetrycollector.default.svc.cluster.local:4318/v1/traces"
+            - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+              value: "http://opentelemetrycollector.default.svc.cluster.local:4318/v1/metrics"

@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-otel-agent",
+  "version": "1.0.0",
+  "description": "A Node.js application instrumented with OpenTelemetry for tracing and metrics, providing a fun and educational journey into observability!",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.15",
+    "@types/node": "^20.4.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.6"
+  },
+  "author": "Leonardo Zwirtes",
+  "license": "ISC"
+}

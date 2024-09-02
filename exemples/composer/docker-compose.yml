@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "55680:55680"
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: ["--config=/etc/otel-collector-config.yaml"]
+
+  nodejs-otel-agent1:
+    # image: leonardozwirtes/nodejs-otel-agent:latest  # If you want to use image
+    build:
+      context: ../..  
+      dockerfile: Dockerfile 
+    ports:
+      - "3000:3000"
+    environment:
+      - OTEL_SERVICE_NAME=nodejs-otel-agent
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-collector:4318/v1/metrics
