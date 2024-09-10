@@ -1,0 +1,38 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "nodejs-otel-agent",
+      "image": "leonardozwirtes/nodejs-otel-agent:latest",
+      "memory": 512,
+      "cpu": 256,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000
+        }
+      ],
+      "environment": [
+        {
+          "name": "OTEL_SERVICE_NAME",
+          "value": "nodejs-otel-agent"
+        },
+        {
+          "name": "OTEL_TRACES_EXPORTER",
+          "value": "otlp"
+        },
+        {
+          "name": "OTEL_METRICS_EXPORTER",
+          "value": "otlp"
+        },
+        {
+          "name": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+          "value": "http://<OTEL_COLLECTOR_EC2>:4318/v1/traces"
+        },
+        {
+          "name": "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT",
+          "value": "http://<OTEL_COLLECTOR_EC2>:4318/v1/metrics"
+        }
+      ]
+    }
+  ]
+}
