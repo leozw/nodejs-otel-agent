@@ -206,6 +206,54 @@ spec:
               value: "http://opentelemetrycollector.default.svc.cluster.local:4318/v1/metrics"
 ```
 
+### Running the Application on Amazon ECS
+You can also run this application on Amazon ECS using a task definition. Below is an example of how you would configure the task:
+
+```json
+{
+  "containerDefinitions": [
+    {
+      "name": "nodejs-otel-agent",
+      "image": "leonardozwirtes/nodejs-otel-agent:latest",
+      "memory": 512,
+      "cpu": 256,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000
+        }
+      ],
+      "environment": [
+        {
+          "name": "OTEL_SERVICE_NAME",
+          "value": "nodejs-otel-agent"
+        },
+        {
+          "name": "OTEL_TRACES_EXPORTER",
+          "value": "otlp"
+        },
+        {
+          "name": "OTEL_METRICS_EXPORTER",
+          "value": "otlp"
+        },
+        {
+          "name": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+          "value": "http://<OTEL_COLLECTOR_EC2>:4318/v1/traces"
+        },
+        {
+          "name": "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT",
+          "value": "http://<OTEL_COLLECTOR_EC2>:4318/v1/metrics"
+        }
+      ]
+    }
+  ]
+}
+```
+ 
+This configuration is a basic example for running the application on ECS, where the OTEL_COLLECTOR_EC2 should be replaced by the EC2 instance where your OpenTelemetry collector is running.
+
+---
+
 ### Why These Variables Are Important
 
 - **OTEL_SERVICE_NAME**: This variable sets the name of your service in the OpenTelemetry traces. It's crucial for identifying which service generated which traces.
