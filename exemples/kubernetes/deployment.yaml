@@ -28,6 +28,6 @@ spec:
             - name: OTEL_METRICS_EXPORTER
               value: "otlp"
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-              value: "http://opentelemetrycollector.default.svc.cluster.local:4318/v1/traces"
+              value: "http://opentelemetrycollector.monitoring.svc.cluster.local:4318/v1/traces"
             - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
-              value: "http://opentelemetrycollector.default.svc.cluster.local:4318/v1/metrics"
+              value: "http://opentelemetrycollector.monitoring.svc.cluster.local:4318/v1/metrics"
